@@ -32,7 +32,10 @@ import os
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
+from mkdocs.plugins import event_priority
 from mkdocs.structure.files import Files
+from mkdocs.structure.nav import Link, Section
+from mkdocs.structure.pages import Page
 
 log = logging.getLogger("mkdocs")
 
@@ -327,6 +330,63 @@ def _root_pages_asset_link_rewrite(markdown, base_path):
   markdown = re.sub(pattern, replace_link, markdown)
 
   return markdown
+
+
+@event_priority(-51)
+def on_nav(nav, *, config, **kwargs):
+  """Place blog category pages directly under Announcements in the sidebar."""
+  for item in nav.items:
+    if not isinstance(item, Section):
+      continue
+
+    if item.title == "Overview":
+      _ensure_home(item, nav)
+
+    for child in item.children:
+      if isinstance(child, Section) and child.title == "Announcements":
+        _hoist_blog_categories(child)
+
+
+def _ensure_home(overview, nav):
+  if any(
+    (isinstance(child, Page) and child.file.src_path == "index.md")
+    or (isinstance(child, Link) and child.title == "Home")
+    for child in overview.children
+  ):
+    return
+
+  home = next(
+    (page for page in nav.pages if page.file.src_path == "index.md"),
+    None,
+  )
+  home_url = home.url if home else "/"
+
+  insert_at = 0
+  overview.children.insert(insert_at, Link("Home", home_url))
+
+
+def _hoist_blog_categories(announcements):
+  categories = next(
+    (
+      child
+      for child in announcements.children
+      if isinstance(child, Section) and child.title == "Categories"
+    ),
+    None,
+  )
+  if not categories:
+    return
+
+  category_pages = [
+    page for page in categories.children if isinstance(page, Page)
+  ]
+  announcements.children.remove(categories)
+
+  insert_at = 1
+  for page in category_pages:
+    page.parent = announcements
+    announcements.children.insert(insert_at, page)
+    insert_at += 1
 
 
 def on_post_build(config):

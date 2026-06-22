@@ -1096,3 +1096,50 @@ p.hero-description {
 .custom-banner-close:hover {
   background-color: #e9ecef;
 }
+
+/* --- Announcements feed --- */
+.md-content:has(.md-post--excerpt) {
+  --post-header-gap: 0.8rem;
+  --post-inner-gap: 0.25rem;
+  --post-divider-gap: 1rem;
+}
+
+.md-content:has(.md-post--excerpt) > .md-content__inner > header.md-typeset p {
+  margin: 0 0 var(--post-header-gap);
+}
+
+/* Blog meta defaults to 0.7rem — bump to match doc body text */
+.md-content:has(.md-post--excerpt) .md-post--excerpt .md-meta {
+  font-size: 0.8rem;
+}
+
+.md-content:has(.md-post--excerpt) .md-post--excerpt .md-post__header {
+  margin-bottom: var(--post-inner-gap);
+}
+
+.md-content:has(.md-post--excerpt) .md-post--excerpt .md-post__content > h2 {
+  margin-bottom: var(--post-inner-gap);
+}
+
+.md-content:has(.md-post--excerpt) .md-post--excerpt .md-post__content > h2 + p {
+  margin-top: 0;
+  margin-bottom: var(--post-inner-gap);
+}
+
+.md-content:has(.md-post--excerpt) .md-post--excerpt .md-post__action {
+  margin: 0;
+}
+
+.md-post--excerpt {
+  margin-bottom: 0;
+}
+
+.md-post--excerpt + .md-post--excerpt {
+  border-top: 0.05rem solid rgb(0 0 0 / 10%);
+  margin-top: var(--post-divider-gap);
+  padding-top: var(--post-divider-gap);
+}
+
+.md-post--excerpt:last-of-type {
+  margin-bottom: 3.2rem;
+}

@@ -29,8 +29,8 @@ edit_uri: edit/main/docs/
 # Navigation
 nav:
   - Overview:
-      - Home: index.md
-      - Announcements: documentation/announcements.md
+      - Announcements:
+          - announcements/index.md
       - Core Concepts: documentation/core-concepts.md
       - Specification: !ENV [
           SPEC_URL,
@@ -162,7 +162,7 @@ theme:
     - content.tooltips
     # - navigation.expand
     - navigation.footer
-    # - navigation.indexes
+    - navigation.indexes
     # - navigation.instant
     # - navigation.instant.progress
     # - navigation.path
@@ -215,6 +215,16 @@ hooks:
 # Plugins
 plugins:
   - search
+  - blog:
+      blog_dir: announcements
+      post_url_format: "{slug}"
+      post_date_format: long
+      authors: false
+      pagination: false
+      archive: false
+      post_readtime: false
+      blog_toc: true
+      categories_toc: true
   - macros:
       on_error_fail: true
   - site-urls
@@ -251,7 +261,7 @@ plugins:
               Fundamental UCP abstractions, including the decoupled separation
               of capabilities, extensions, services, and the decentralized
               protocol negotiation model.
-          - documentation/announcements.md: >-
+          - announcements/index.md: >-
               General announcements, release notes, and community updates for
               the Universal Commerce Protocol.
           - documentation/ucp-and-ap2.md: >-

@@ -242,6 +242,17 @@ def on_config(config):
         # Remove Overview section from llmstxt
         del llms_conf["sections"]["Overview"]
 
+  # Disable the blog plugin in spec mode. The spec site only includes
+  # specification/ pages (see on_files), so the blog entrypoint
+  # (announcements/index.md) is filtered out of the file collection. The blog
+  # plugin would otherwise fail to resolve that entrypoint and crash.
+  if mode == "spec":
+    blog = config["plugins"].get("material/blog") or config["plugins"].get(
+      "blog"
+    )
+    if blog is not None:
+      blog.config.enabled = False
+
   # Always force logo to link to root site
   if "extra" not in config:
     config["extra"] = {}

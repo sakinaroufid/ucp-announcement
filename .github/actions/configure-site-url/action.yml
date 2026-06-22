@@ -17,9 +17,12 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
         PAGES_URL=$(gh api "repos/${{ github.repository }}/pages" --jq '.html_url' 2>/dev/null || true)
-        if [ -z "$PAGES_URL" ] || [ "$PAGES_URL" = "null" ]; then
-          PAGES_URL="https://${{ github.repository_owner }}.github.io/${GITHUB_REPOSITORY#*/}"
-        fi
+        # gh prints an error body to stdout when Pages is disabled (HTTP 404),
+        # so only trust a value that is an actual http(s) URL; otherwise fall back.
+        case "$PAGES_URL" in
+          http://*|https://*) ;;
+          *) PAGES_URL="https://${{ github.repository_owner }}.github.io/${GITHUB_REPOSITORY#*/}" ;;
+        esac
         if [[ "$PAGES_URL" != */ ]]; then
           PAGES_URL="${PAGES_URL}/"
         fi

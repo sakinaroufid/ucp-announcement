@@ -1,0 +1,1538 @@
+# Universal Commerce Protocol (UCP)
+
+> The Universal Commerce Protocol (UCP) is a solution for enabling gen AI agents to make payments on behalf of users, safely, securely, and in a decentralized and privacy protecting manner. This protocol is a part of the broader ecosystem, which includes agentic protocols like A2A and MCP, and encompasses the global nature of payments.
+
+
+This is the documentation directory for the Universal Commerce Protocol
+(UCP), an open standard that enables gen AI agents to safely, securely,
+and privately execute commerce actions (i.e., discovering, buying) on
+behalf of users.
+### Technical Specification Indices (llms.txt)
+For raw, LLM-optimized indices of our versioned technical
+specifications:
+- [Latest Stable UCP
+  Specification Index](https://ucp.dev/latest/llms.txt):
+  Standardized specifications for production deployments.
+- [UCP Specification Index
+  (2026-04-08)](https://ucp.dev/2026-04-08/llms.txt):
+  Stable spec release version 2026-04-08.
+- [UCP Specification Index
+  (2026-01-23)](https://ucp.dev/2026-01-23/llms.txt):
+  Stable spec release version 2026-01-23.
+- [UCP Specification Index
+  (2026-01-11)](https://ucp.dev/2026-01-11/llms.txt):
+  Stable spec release version 2026-01-11.
+
+
+# Overview
+
+UCP is expanding to new industries, starting with Lodging and Food
+
+Detailed specifications coming soon!
+
+# Universal Commerce Protocol
+
+The common language for platforms, agents, and businesses.
+
+UCP provides building blocks for agentic commerce across industries—from discovery to checkout and beyond—allowing the ecosystem to operate through one standard, without custom builds.
+
+### Learn
+
+Protocol overview, core concepts, and design principles
+
+[Get Started](https://sakinaroufid.github.io/ucp-announcement/latest/specification/overview/index.md)
+
+### Implement
+
+GitHub repo, technical spec, SDKs, and reference implementations
+
+[View on GitHub](https://github.com/Universal-Commerce-Protocol/ucp)
+
+## Co-developed by industry leaders
+
+UCP is built by the industry, to enable seamless agentic experiences. It solves fragmented user journeys that lead to frustrated users and conversion drop off.
+
+Shopping Lodging Food
+
+Google
+
+Shopify
+
+Etsy
+
+Wayfair
+
+Target
+
+Walmart
+
+Amazon
+
+Microsoft
+
+Meta
+
+Salesforce
+
+Stripe
+
+Amadeus
+
+Booking.com
+
+Expedia Group
+
+Google
+
+Hilton
+
+Marriott
+
+Trip.com
+
+DoorDash
+
+Google
+
+Square
+
+Toast
+
+Uber Eats
+
+## Built for flexibility, security, and scale
+
+Agentic commerce requires interoperability. UCP is built on industry standards — REST and JSON-RPC transports; [Agent Payments Protocol (AP2)](https://ap2-protocol.org/), [Agent2Agent (A2A)](https://a2a-protocol.org/latest/), and [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) support built-in — so different systems can work together without custom integration.
+
+### Scalable and universal
+
+Surface-agnostic design that scales to support any business (from small to enterprise), in every industry, across all modalities, including chat, visual commerce, and voice.
+
+### Businesses at the center
+
+Built to facilitate commerce, ensuring businesses retain control and remain the Merchant of Record, with full ownership of customer relationships.
+
+### Open and extensible
+
+Open and extensible by design, enabling development of community-driven capabilities and extensions across industries.
+
+### Secure and private
+
+Built on proven security standards for account linking (OAuth 2.0) and secure payment (AP2) via payment mandates and verifiable credentials.
+
+### Frictionless payments
+
+Open wallet ecosystem with interoperability between providers, ensuring buyers can use their preferred payment methods.
+
+## See it in action
+
+UCP is designed to facilitate the entire commerce lifecycle, from discovery and search to final sale and post-purchase support. The protocol supports a range of core capabilities, including: Catalog Search and Lookup, Cart Building, Identity Linking, Checkout, and Order Management.
+
+Shopping Lodging Food
+
+Checkout Identity Linking Order
+
+### Checkout
+
+Support complex cart logic, dynamic pricing, tax calculations, and more across millions of businesses through unified checkout sessions.
+
+[Get Started](/latest/specification/checkout/)
+
+```json
+{
+  "ucp": { ... },
+  "id": "chk_123456789",
+  "status": "ready_for_complete",
+  "currency": "USD",
+  "buyer": {
+    "email": "e.beckett@example.com",
+    "first_name": "Elisa",
+    "last_name": "Beckett"
+  },
+  "line_items": [
+    {
+      "id": "li_1",
+      "item": {
+        "id": "item_123",
+        "title": "Monos Carry-On Pro suitcase",
+        "price": 26550
+      },
+      "quantity": 1,
+      ...
+    }
+  ],
+  "totals": [ ... ],
+  "links": [ ... ],
+  "payment": { ... },
+  "fulfillment": {
+    "methods": [
+      {
+        "id": "method_1",
+        "type": "shipping",
+        "line_item_ids": ["li_1"],
+        "selected_destination_id": "dest_1",
+        "destinations": [
+          {
+            "id": "dest_1",
+            "first_name": "Elisa",
+            "last_name": "Beckett",
+            "street_address": "1600 Amphitheatre Pkwy",
+            "address_locality": "Mountain View",
+            "address_region": "CA",
+            "postal_code": "94043",
+            "address_country": "US"
+          }
+        ],
+        "groups": [
+          {
+            "id": "group_1",
+            "line_item_ids": ["li_1"],
+            "selected_option_id": "free-shipping",
+            "options": [
+              {
+                "id": "free-shipping",
+                "title": "Free Shipping",
+                "totals": [ {"type": "total", "amount": 0} ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Identity Linking
+
+OAuth 2.0 standard enables agents to maintain secure, authorized relationships without sharing credentials.
+
+[Get Started](https://sakinaroufid.github.io/ucp-announcement/latest/specification/identity-linking/index.md)
+
+```json
+Sample of /.well-known/oauth-authorization-server
+
+{
+  "issuer": "https://example.com",
+  "authorization_endpoint": "https://example.com/oauth2/authorize",
+  "token_endpoint": "https://example.com/oauth2/token",
+  "revocation_endpoint": "https://example.com/oauth2/revoke",
+  "scopes_supported": [
+    "dev.ucp.shopping.checkout"
+  ],
+  "response_types_supported": [
+    "code"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_basic"
+  ],
+  "service_documentation": "https://example.com/docs/oauth2"
+}
+```
+
+### Order
+
+From purchase confirmation to delivery. Real-time webhooks power status updates, shipment tracking, and return processing across every channel.
+
+[Get Started](https://sakinaroufid.github.io/ucp-announcement/latest/specification/order/index.md)
+
+```json
+{
+  "ucp": { ... },
+  "id": "order_123456789",
+  "checkout_id": "chk_123456789",
+  "permalink_url": ...,
+  "line_items": [ ... ],
+  "fulfillment": {
+    "expectations": [
+      {
+        "id": "exp_1",
+        "line_items": [{ "id": "li_1", "quantity": 1 }],
+        "method_type": "shipping",
+        "destination": {
+          "first_name": "Elisa",
+          "last_name": "Beckett",
+          "street_address": "1600 Amphitheatre Pkwy",
+          "address_locality": "Mountain View",
+          "address_region": "CA",
+          "postal_code": "94043",
+          "address_country": "US"
+        },
+        "description": "Arrives in 2-3 business days",
+        "fulfillable_on": "now"
+      }
+      ...
+    ],
+    "events": [
+      {
+        "id": "evt_1",
+        "occurred_at": "2026-01-11T10:30:00Z",
+        "type": "delivered",
+        "line_items": [{ "id": "li_1", "quantity": 1 }],
+        "tracking_number": "123456789",
+        "tracking_url": "https://fedex.com/track/123456789",
+        "description": "Delivered to front door"
+      }
+    ]
+  },
+  "adjustments": [
+    {
+      "id": "adj_1",
+      "type": "refund",
+      "occurred_at": "2026-01-12T14:30:00Z",
+      "status": "completed",
+      "line_items": [{ "id": "li_1", "quantity": -1 }],
+      "totals": [{ "type": "total", "amount": -26550 }],
+      "description": "Defective item"
+    }
+  ],
+  "totals": [ ... ]
+}
+```
+
+### Lodging
+
+Enables high-quality booking flows within AI surfaces—complete with real-time pricing and availability checks, smooth handling of complex rate plans, easy guest registration, and secure checkout.
+
+[Learn more](https://developers.google.com/hotels/ucp)
+
+Detailed specifications coming soon
+
+### Food
+
+Powers conversational food ordering journeys that seamlessly handle nuanced meal customization, real-time availability and deals, tipping, and delivery instructions through a scalable checkout experience on AI surfaces.
+
+[Learn more](https://developers.google.com/actions-center/verticals/ordering/ucp)
+
+Detailed specifications coming soon
+
+### Power native checkout
+
+Integrate and negotiate directly with a seller's checkout API to power native UI and workflows for your platform.
+
+[Get Started](https://sakinaroufid.github.io/ucp-announcement/latest/specification/checkout-rest/index.md)
+
+### Embed business checkout
+
+Embed and render business checkout UI to support complex checkout flows, with advanced capabilities like bidirectional communication, and payment and shipping address delegation.
+
+[See how it works](https://sakinaroufid.github.io/ucp-announcement/latest/specification/embedded-checkout/index.md)
+
+## Designed for the entire commerce ecosystem
+
+### For Developers
+
+Build the future of commerce on an open foundation. Join our community in evolving an open-source standard designed for the next generation of digital commerce.
+
+[View the technical spec](https://sakinaroufid.github.io/ucp-announcement/latest/specification/overview/index.md)
+
+### For Businesses
+
+UCP empowers businesses to meet customers wherever they are—AI assistants, agents, embedded experiences—without rebuilding your checkout for each. You remain the Merchant of Record and your business logic stays intact.
+
+[Integrate with UCP](https://developers.google.com/merchant/ucp/)
+
+### For AI Platforms
+
+Simplify business onboarding with standardized APIs and provide your audience with an integrated agentic commerce experience. Compatible with MCP, A2A, and existing agent frameworks.
+
+[Learn more about UCP core concepts](https://sakinaroufid.github.io/ucp-announcement/documentation/core-concepts/index.md)
+
+### For Payment Providers
+
+Universal payments that are provable—every authorization backed by cryptographic proof of user consent. Open, modular payment handler design enables open interoperability and choice of payment methods.
+
+[Learn more about UCP and AP2](https://sakinaroufid.github.io/ucp-announcement/documentation/ucp-and-ap2/index.md)
+
+## Endorsed across the ecosystem
+
+Accor
+
+Adore Beauty
+
+Adyen
+
+Affirm
+
+Amadeus
+
+Amex
+
+Ant International
+
+Best Buy
+
+Block
+
+Booking.com
+
+Bunnings
+
+Carrefour
+
+Checkout.com
+
+Chewy
+
+Choice Hotels
+
+Commerce
+
+DoorDash
+
+Expedia Group
+
+Fiserv
+
+Flipkart
+
+Gap
+
+Hilton
+
+IHG
+
+Klarna
+
+Kogan
+
+Kroger
+
+Lowe's
+
+Macy's
+
+Marriott
+
+Mastercard
+
+Paypal
+
+Petbarn
+
+Salesforce
+
+SAP
+
+Sephora
+
+Shopee
+
+Splitit
+
+Square
+
+Stripe
+
+The Home Depot
+
+Toast
+
+Trip.com
+
+Uber Eats
+
+Ulta
+
+Visa
+
+VTEX
+
+Worldpay
+
+Wyndham
+
+Zalando
+
+Accor
+
+Adore Beauty
+
+Adyen
+
+Affirm
+
+Amadeus
+
+Amex
+
+Ant International
+
+Best Buy
+
+Block
+
+Booking.com
+
+Bunnings
+
+Carrefour
+
+Checkout.com
+
+Chewy
+
+Choice Hotels
+
+Commerce
+
+DoorDash
+
+Expedia Group
+
+Fiserv
+
+Flipkart
+
+Gap
+
+Hilton
+
+IHG
+
+Klarna
+
+Kogan
+
+Kroger
+
+Lowe's
+
+Macy's
+
+Marriott
+
+Mastercard
+
+Paypal
+
+Petbarn
+
+Salesforce
+
+SAP
+
+Sephora
+
+Shopee
+
+Splitit
+
+Square
+
+Stripe
+
+The Home Depot
+
+Toast
+
+Trip.com
+
+Uber Eats
+
+Ulta
+
+Visa
+
+VTEX
+
+Worldpay
+
+Wyndham
+
+Zalando
+
+## Get started today
+
+UCP is an open standard designed to let AI agents, apps, businesses, and payment providers interact seamlessly without needing custom, one-off integrations for every connection. We actively seek your feedback and contributions to help build the future of commerce.
+
+The complete technical specification, documentation, and reference implementations are hosted in our public GitHub repository.
+
+### [Download](https://github.com/Universal-Commerce-Protocol/samples)
+
+Download and run our code samples
+
+### [Experiment](https://sakinaroufid.github.io/ucp-announcement/latest/specification/playground/index.md)
+
+Experiment with the protocol and its different agent roles
+
+### [Contribute](https://github.com/Universal-Commerce-Protocol/.github/blob/main/CONTRIBUTING.md)
+
+Contribute your feedback and code to the public repository
+
+[Visit the GitHub repository](https://github.com/Universal-Commerce-Protocol/ucp)
+
+# Core Concepts
+
+The Universal Commerce Protocol (UCP) is an open standard for interoperability between commerce entities. It defines a common language and functional primitives so that platforms and businesses can interoperate securely and reliably across commercial verticals.
+
+This document provides the detailed technical specification for UCP. For a complete definition of all data models and schemas, see the [Schema Reference](/ucp-announcement/latest/specification/reference/).
+
+Terminology
+
+Throughout this documentation, **Platform** refers to any entity that *consumes* capabilities — an app, an AI agent, a procurement system, or another business. **Business** refers to any entity that *exposes* capabilities — a retailer, a supplier, a service provider, or any other participant offering commerce functionality. These roles are defined by direction of capability flow, not by industry vertical, making UCP equally applicable to B2C, B2B, and agent-to-agent commerce.
+
+Its primary goal is to enable:
+
+- **Platforms:** To dynamically discover and consume the capabilities a business exposes.
+- **Businesses:** To declare what they offer and how they operate — once — and have any compatible platform discover and use it without bespoke integrations.
+- **Payment & Credential Providers:** To expose their services — tokenization, vaulting, credential issuance — once, and power secure commerce for users across any compatible platform and business.
+
+## High level architecture
+
+## Key Goals of UCP
+
+- **Interoperability:** Bridge the gap between platforms, businesses, and payment ecosystems.
+- **Discovery:** Allow platforms to dynamically discover what capabilities a business supports (e.g., "Do they support checkout?", "Do they support fulfillment options or identity linking?").
+- **Security:** Facilitate secure, standards-based (OAuth 2.0, PCI-DSS compliant patterns) exchanges of sensitive user and payment data.
+- **Agentic Commerce:** Enable AI agents to act on behalf of varied principals (an individual, organization, or another agent) and support different modalities (human-in-the-loop, fully autonomous).
+
+## Roles & Participants
+
+UCP defines the interactions between four distinct actors, each playing a specific role in the interaction lifecycle.
+
+### Platform (Application/Agent)
+
+The platform is any entity that consumes capabilities exposed by a business — an AI agent, a mobile app, a procurement system, or another business acting as a capability consumer. It orchestrates the interaction by discovering what the business supports and invoking the appropriate capabilities on behalf of its principal (a user, an automated process, or another system).
+
+- **Responsibilities:** Discovering business capabilities via profiles, initiating and managing capability sessions, and acting on behalf of its principal within the bounds of negotiated capabilities.
+- **Examples:** AI Shopping Assistants, Super Apps, Search Engines, B2B Procurement Systems.
+
+### Business
+
+The entity exposing capabilities. In transactional contexts, the business typically acts as the **Merchant of Record (MoR)**, retaining financial liability and ownership of the transaction — though UCP's capability model is not limited to transactional use cases.
+
+- **Responsibilities:** Publishing a UCP profile, declaring supported services, capabilities and extensions, processing capability invocations which may be stateful or stateless.
+- **Examples:** Retailers, Airlines, Hotel Chains, Service Providers, Suppliers, Distributors.
+
+### Credential Provider (CP)
+
+A trusted entity responsible for securely managing and sharing sensitive user data, particularly payment instruments and shipping addresses.
+
+- **Responsibilities:** Authenticating the user, issuing payment tokens (to keep raw card data off the platform), and holding PII securely to minimize compliance scope for other parties.
+- **Examples:** Digital Wallets (e.g., Google Wallet, Apple Pay), Identity Providers.
+
+### Payment Service Provider (PSP)
+
+The financial infrastructure provider that processes payments on behalf of businesses.
+
+- **Responsibilities:** Authorizing and capturing transactions, handling settlements, and communicating with card networks. The PSP often interacts directly with tokens provided by the Credential Provider.
+- **Examples:** Stripe, Adyen, PayPal, Braintree, Chase Paymentech.
+
+## Core Concepts Summary
+
+UCP revolves around three fundamental constructs that define how entities interact.
+
+### Capabilities
+
+Capabilities are standalone, independently versioned features that a business declares it supports. They are the "verbs" of the protocol — discrete units of functionality that platforms can discover, negotiate, and invoke.
+
+Each capability is identified by a reverse-domain name (e.g., `dev.ucp.shopping.checkout`) and carries a date-based version. Capabilities are declared in the business's UCP profile at `/.well-known/ucp` and negotiated and confirmed in every response so that the platform always knows the active feature set for a given interaction.
+
+The following are examples of capabilities defined in UCP — see the [Specification](/ucp-announcement/latest/specification/overview/) for the authoritative and up-to-date list.
+
+| Capability                        | Description                               |
+| --------------------------------- | ----------------------------------------- |
+| `dev.ucp.shopping.checkout`       | Initiates and completes purchase sessions |
+| `dev.ucp.shopping.cart`           | Pre-checkout cart management              |
+| `dev.ucp.shopping.catalog.search` | Search across a business catalog          |
+| `dev.ucp.shopping.catalog.lookup` | Retrieve a specific product by ID         |
+| `dev.ucp.shopping.order`          | Order lifecycle events                    |
+| `dev.ucp.common.identity_linking` | OAuth-based account linking               |
+
+### Extensions
+
+Extensions optionally augment a base capability. They use the `extends` field to declare their parent(s) and compose onto the base schema using JSON Schema `allOf`. Extensions appear in `ucp.capabilities[]` alongside core capabilities.
+
+```json
+{
+  "dev.ucp.shopping.fulfillment": [
+    {
+      "version": "2026-04-08",
+      "extends": "dev.ucp.shopping.checkout",
+      "spec": "https://ucp.dev/2026-04-08/specification/fulfillment",
+      "schema": "https://ucp.dev/2026-04-08/schemas/shopping/fulfillment.json"
+    }
+  ]
+}
+```
+
+An extension that declares `extends` without its parent in the negotiated intersection is automatically pruned. This ensures extension coherence — you never activate a discount extension without the checkout it extends.
+
+The following are examples of extensions defined in UCP — see the [Specification](/ucp-announcement/latest/specification/overview/) for the authoritative and up-to-date list.
+
+| Extension                        | Extends        | Description                                          |
+| -------------------------------- | -------------- | ---------------------------------------------------- |
+| `dev.ucp.shopping.discount`      | checkout, cart | Discount codes and promotions                        |
+| `dev.ucp.shopping.fulfillment`   | checkout       | Shipping and delivery options                        |
+| `dev.ucp.shopping.ap2_mandate`   | checkout       | Non-repudiable authorization for autonomous commerce |
+| `dev.ucp.shopping.buyer_consent` | checkout, cart | Explicit consent capture                             |
+
+### Services
+
+**Services** group the operations and events for a vertical under a reverse-domain namespace (e.g., `dev.ucp.shopping`). A service declares *what* functionality exists for that vertical; transport bindings declare *how* it is accessed on the wire.
+
+A single service can be accessed via multiple transport bindings:
+
+| Transport    | Format        | Best For                               |
+| ------------ | ------------- | -------------------------------------- |
+| **REST**     | OpenAPI 3.1.0 | Standard server-to-server integrations |
+| **MCP**      | OpenRPC       | AI agents via Model Context Protocol   |
+| **A2A**      | Agent Card    | Agent-to-Agent protocol integrations   |
+| **Embedded** | OpenRPC       | Embedded integrations                  |
+
+A business declares which transport bindings it supports within each service; platforms pick whichever fits their context — an AI agent may prefer MCP, a traditional web app may use REST.
+
+Service namespaces are also UCP's extensibility mechanism for new verticals — e.g., `dev.ucp.hotels` may be introduced in the future. Businesses opt in by declaring which services they support.
+
+## Discovery & Capability Negotiation
+
+UCP uses a profile-based discovery model. Every business publishes a machine-readable profile at `/.well-known/ucp` that declares which services, capabilities, and payment handlers they support. Platforms advertise their own profile URL on each request via the `UCP-Agent` header.
+
+```text
+POST /checkout-sessions HTTP/1.1
+UCP-Agent: profile="https://agent.example/profiles/shopping-agent.json"
+```
+
+This design enables **permissionless onboarding** — any platform with a discoverable profile can interact with any business without prior registration. Businesses may additionally establish trust with known platforms through out-of-band onboarding & verification mechanisms (API keys, OAuth credentials, mTLS certificates).
+
+### Capability Intersection
+
+Capability negotiation follows a **server-selects** architecture. The business determines the active capabilities by computing the intersection of its own declared capabilities with those in the platform's profile:
+
+1. **Intersect by name** — Only capabilities both parties declare are candidates.
+1. **Select version** — For each matched capability, compute the set of versions present in both the business and platform arrays. Select the highest (latest date). If no mutual version exists, exclude the capability.
+1. **Prune orphaned extensions** — Extensions are removed if **none** of their parent capabilities are in the intersection. Pruning repeats until stable (handles chains).
+
+The result is a minimal, mutually compatible capability set. Businesses include the active capabilities in every response so platforms always know which features apply to a given interaction.
+
+### Profile Structure
+
+Both business and platform profiles share a common base structure — a `ucp` object declaring protocol version, services, capabilities, and payment handlers, alongside a `signing_keys` array of JWK public keys. The `ucp` object differs between the two: the business profile uses a business-specific schema (hosted at `/.well-known/ucp`), while the platform profile uses a platform-specific schema (hosted at a URI the platform advertises per-request). This dual-purpose profile — capabilities *and* keys in a single document — means discovery and authentication are resolved together.
+
+```json
+{
+  "ucp": {
+    "version": "2026-04-08",
+    "services": {
+      "dev.ucp.shopping": [
+        {
+          "version": "2026-04-08",
+          "spec": "https://ucp.dev/2026-04-08/specification/overview",
+          "transport": "rest",
+          "schema": "https://ucp.dev/2026-04-08/services/shopping/rest.openapi.json",
+          "endpoint": "https://business.example.com/ucp/v1"
+        }
+      ]
+    },
+    "capabilities": {
+      "dev.ucp.shopping.checkout": [{
+        "version": "2026-04-08",
+        "spec": "https://ucp.dev/2026-04-08/specification/checkout",
+        "schema": "https://ucp.dev/2026-04-08/schemas/shopping/checkout.json"
+      }],
+      "dev.ucp.shopping.fulfillment": [{
+        "version": "2026-04-08",
+        "spec": "https://ucp.dev/2026-04-08/specification/fulfillment",
+        "schema": "https://ucp.dev/2026-04-08/schemas/shopping/fulfillment.json",
+        "extends": "dev.ucp.shopping.checkout"
+      }]
+    },
+    "payment_handlers": {
+      "com.example.processor_tokenizer": [{
+        "id": "processor_tokenizer",
+        "version": "2026-04-08",
+        "spec": "https://example.com/specs/payments/processor_tokenizer",
+        "schema": "https://example.com/specs/payments/merchant_tokenizer.json"
+      }]
+    }
+  },
+  "signing_keys": [{ "kid": "key_2026", "kty": "EC", "crv": "P-256", "x": "WbbXwVYGdJoP4Xm3qCkGvBRcRvKtEfXDbWvPzpPS8LA", "y": "sP4jHHxYqC89HBo8TjrtVOAGHfJDflYxw7MFMxuFMPY", "alg": "ES256" }]
+}
+```
+
+## Namespace Governance
+
+UCP uses reverse-domain naming to embed governance authority directly into capability and service identifiers. This eliminates the need for a central registry — domain owners control their own namespace.
+
+```text
+{reverse-domain}.{service}.{capability}
+```
+
+| Name                                | Authority   | Who governs        |
+| ----------------------------------- | ----------- | ------------------ |
+| `dev.ucp.shopping.checkout`         | ucp.dev     | UCP governing body |
+| `dev.shopify.catalog`               | shopify.dev | Shopify            |
+| `com.example.payments.installments` | example.com | example.com        |
+
+The `spec` and `schema` URLs declared in a capability must originate from the namespace authority domain. Platforms **MUST** validate this binding to prevent spoofed capabilities.
+
+The `dev.ucp.*` namespace is reserved exclusively for capabilities governed by the UCP Tech Council. Any vendor can define and publish capabilities under their own domain — `org.acme.*` — without UCP maintainer approval. Vendor capabilities follow the same extension model, meaning they can extend UCP base capabilities (e.g., `org.acme.loyalty` extending `dev.ucp.shopping.checkout`) or define entirely new ones. Because negotiation is always opt-in, vendor capabilities only activate when both parties declare them, keeping the protocol decentralized by design.
+
+## Payment Architecture
+
+UCP decouples payment instrument acceptance from payment processing to solve the N-to-N complexity problem between platforms, businesses, and payment processors.
+
+### The Trust Triangle
+
+In this section, "Payment Credential Provider" refers to the CP and/or PSP roles defined above; depending on the payment handler, they may be the same entity or distinct.
+
+The payment model is built on three bilateral trust relationships:
+
+1. **Business ↔ Payment Credential Provider** — A pre-existing legal and technical relationship; the business holds API keys and a contract with the payment credential provider.
+1. **Platform ↔ Payment Credential Provider** — The platform interacts with the payment credential provider's interface (e.g., an iframe or API) to tokenize data, but is not the "owner" of the funds.
+1. **Platform ↔ Business** — The platform passes the result (a token or mandate) to the business to finalize the order.
+
+Credentials flow **platform → business** only; businesses **MUST NOT** echo credentials back in responses.
+
+### Payment Handlers
+
+Payment Handlers are **specifications**, not entities. They define how a particular payment instrument is acquired and processed. The distinction:
+
+- **Credential Provider (CP) / PSP** — The participant(s) that issue tokens and process payments. Depending on the handler, these may be the same entity or separate ones (e.g., Google Pay tokenizes; the business's PSP processes).
+- **Payment Handler** — The specification that defines the protocol (e.g., `com.google.pay`, `dev.shopify.shop_pay`)
+
+The 3-step payment lifecycle:
+
+1. **Negotiation** — The business advertises available payment handlers in its profile and checkout response based on contents and negotiated properties of the checkout.
+1. **Acquisition** — The platform executes the handler's logic to acquire a payment instrument (token or encrypted payload) directly from the CP.
+1. **Completion** — The platform submits the instrument to the business, which charges funds via its PSP integration.
+
+## Security & Authentication
+
+### Identity & Key Discovery
+
+UCP profiles serve a dual purpose: declaring capabilities **and** publishing signing keys. Both parties resolve keys from the same profile document used for capability negotiation, eliminating a separate key management step.
+
+Key lookup:
+
+1. Obtain the signer's profile URL (from `UCP-Agent` header or `/.well-known/ucp`).
+1. Fetch and cache the profile.
+1. Match the `keyid` from `Signature-Input` to a `kid` in `signing_keys[]`.
+1. Verify the signature using the corresponding public key.
+
+### Authentication Mechanisms
+
+UCP supports multiple authentication models:
+
+| Mechanism                                                                        | Onboarding      | Notes                                                  |
+| -------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------ |
+| **HTTP Message Signatures** ([RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)) | Permissionless  | Keys discovered from profile; no prior exchange needed |
+| **OAuth 2.0**                                                                    | Pre-established | Client credentials or authorization code               |
+| **API Keys**                                                                     | Pre-established | Pre-shared secrets exchanged out-of-band               |
+| **mTLS**                                                                         | Pre-established | Mutual TLS with client certificates                    |
+
+HTTP Message Signatures are the only mechanism that enables permissionless interaction — public keys are discovered from each party's profile, with no prior credential exchange.
+
+When a business emits updates via webhook, its identity is asserted the same way: the request carries a `UCP-Agent` header pointing to the business's profile, and the platform verifies the signature against the signing keys published there.
+
+### Identity Linking
+
+The `dev.ucp.common.identity_linking` capability enables a platform to obtain OAuth 2.0 authorization to act on behalf of a user at a business — unlocking loyalty benefits, personalized offers, wishlists, and authenticated checkouts. Businesses publish their OAuth 2.0 server metadata at `/.well-known/oauth-authorization-server`.
+
+## Versioning
+
+UCP uses date-based version identifiers (`YYYY-MM-DD`). The version represents the date of the last backwards-incompatible change.
+
+- **Non-breaking additions** do not increment the date.
+- **Breaking changes** require a `!` prefix in the PR title and a 2-week advance notice to the community before merging.
+- Businesses that support older protocol versions **SHOULD** publish version-specific profiles and advertise them via the `supported_versions` field in their profile, enabling platforms to discover the exact capability set for each supported version.
+
+Capability schemas carry their version inline, which enables independent versioning — a discount extension can version on a different cadence than the checkout capability it extends.
+
+See [Versioning](https://sakinaroufid.github.io/ucp-announcement/versioning/index.md) for the release branch process and the full breaking-change procedure.
+
+# Announcements
+
+Welcome to the Universal Commerce Protocol (UCP) announcements page. Here we post updates about the protocol, new releases, and governance updates.
+
+# UCP and AP2
+
+UCP is fully compatible with [Agent Payments Protocol (AP2)](https://ap2-protocol.org/). AP2 serves as the trust layer for agent-led transactions completed on behalf of a user, mandating a secure, verifiable exchange of intents and authorizations between Platforms and businesses. By using Verifiable Digital Credentials (VDCs), AP2 eliminates the need for middleman "trust referees." It allows businesses to receive signed checkout commitments—ensuring the price and terms don't change mid-flow—and allows Platforms to provide cryptographically signed payment authorizations that are mathematically tied to the specific state of the cart.
+
+## Key benefits
+
+- **Binding proof:** Both parties have cryptographic evidence of exactly what was offered and what was agreed upon, ensuring the transaction is final and authentic.
+- **Fraud reduction:** Payment mandates are scoped specifically to a checkout hash, preventing "token replay" or amount manipulation.
+- **Agentic readiness:** Allows autonomous AI agents to transact on behalf of users with pre-defined, verifiable boundaries.
+
+## Protocol flow
+
+1. **Discovery:** The business publishes their discovery document, declaring support for the AP2 extension.
+1. **Session Activation:** When creating or updating a checkout session, the Platform signals the activation of AP2.
+1. **Signing (business):** The business responds with a `checkoutSignature` (a detached JWT signing the checkout state) and lists supported verifiable presentation formats (e.g., `sd-jwt`).
+1. **Authorization:** Upon user consent, the Platform generates two credentials:
+   - **CheckoutMandate:** Contains the hash of the `CheckoutObject`.
+   - **PaymentMandate:** An SD-JWT-VC containing the payment authorization.
+1. **Completion:** The Platform submits both mandates to the business’ `/complete` endpoint.
+1. **Verification:**
+   - The business verifies the `CheckoutMandate`.
+   - The Payment Processor verifies the `PaymentMandate`.
+1. **Confirmation:** If valid, the payment is processed, and the order is confirmed.
+
+**Dependencies:** Checkout capability
+
+[See here for full AP2 mandates extension](/ucp-announcement/latest/specification/ap2-mandates/)
+
+[Learn more about AP2](https://ap2-protocol.org)
+
+# Roadmap
+
+This roadmap is meant to provide transparency into our strategic priorities and to align our partners on the critical path toward a fully agentic, global commerce standard. Our goal is to move beyond isolated transactions and build a cohesive, intelligent commerce layer that works across borders and verticals.
+
+**Note:** This roadmap reflects our current direction and intends to guide planning, but it does not constitute a commitment to deliver specific features. Our approach to these challenges may evolve, and initiatives are subject to change, removal, or addition as business priorities shift and we receive community feedback.
+
+## Upcoming roadmap priorities
+
+### Deeper support for the full consumer journey
+
+To move beyond isolated transactions, we are expanding the protocol's scope to tackle key user journeys such as multi-item checkout, loyalty, and lifecycle management, while ensuring the business's brand and logic remain central to all shopping experiences. With product discovery, cart building, and post-order management now part of the specification, key upcoming initiatives include:
+
+- **Loyalty & Member benefits:** Capabilities to enable loyalty and member benefits to help users find the best value and businesses achieve a deeper connection with their consumers through account linking.
+- **Native cross-sell and upsell modules:** Capabilities for businesses to provide personalized recommendations and upsells based on user context.
+
+### Support for global markets
+
+We are building a scalable ecosystem that is inclusive of all business sizes and geographies, ensuring that "simple and open" means accessible to everyone. We plan to do this through a phased rollout across markets, including India, Indonesia, Latin America, and others. We are adapting the protocol to support broader regional use cases and localized payment interoperability.
+
+### Expanding across industries
+
+We are scaling UCP across a broader range of industries, focusing on industries with foundational actions that can be standardized into functional primitives. This architecture allows us to shape how businesses engage on AI platforms across entire user journeys, backing their presence with real-time data and secure checkout experiences.
+
+New specifications are being developed with industry leaders across key industries including:
+
+- **Food:** New UCP capabilities and schema to enable restaurant and menu discovery across the wide array of modification options, dish selection to checkout with tipping and delivery notes.
+- **Lodging:** New UCP capabilities and schema for hotels discovery, room selection with various rate options, booking with guest details, provision, and payment scheduling.
+
+## Build with us
+
+The future of commerce cannot be built in a vacuum. We invite businesses, developers, and payment providers to join us in refining these specifications. Your feedback on our early builds helps us shape the standards that will power the next generation of global commerce.
+
+[Become a UCP contributor](https://github.com/Universal-Commerce-Protocol/ucp?tab=contributing-ov-file)
+
+# Schema Authoring Guide
+
+This guide documents conventions for authoring UCP JSON schemas: metadata fields, the registry pattern, schema variants, and versioning.
+
+## Schema Metadata Fields
+
+UCP schemas use standard JSON Schema fields plus UCP-specific metadata:
+
+| Field         | Standard    | Purpose                                                             | Required For                             |
+| ------------- | ----------- | ------------------------------------------------------------------- | ---------------------------------------- |
+| `$schema`     | JSON Schema | Declares JSON Schema draft version (**SHOULD** use `draft/2020-12`) | All schemas                              |
+| `$id`         | JSON Schema | Schema's canonical URI for `$ref` resolution                        | All schemas                              |
+| `title`       | JSON Schema | Human-readable display name                                         | All schemas                              |
+| `description` | JSON Schema | Schema purpose and usage                                            | All schemas                              |
+| `name`        | UCP         | Reverse-domain identifier; doubles as registry key                  | Capabilities, services, handlers         |
+| `version`     | UCP         | Entity version (`YYYY-MM-DD` format)                                | Capabilities, services, payment handlers |
+| `id`          | UCP         | Instance identifier for multiple configurations                     | Payment handlers only                    |
+
+### Why Self-Describing?
+
+Capability schemas **must be self-describing**: when a platform fetches a schema, it should determine exactly what capability and version it represents without cross-referencing other documents. This matters because:
+
+1. **Independent versioning**: Capabilities may version independently. The schema must declare its version explicitly—you can't infer it from the URL.
+1. **Validation**: Validators can cross-check that a capability declaration's `schema` URL points to a schema whose embedded `name`/`version` match the declaration. Mismatches are authoring errors caught at build time.
+1. **Developer experience**: When reading a schema file, integrators immediately see what capability it defines without reverse-engineering the `$id` URL.
+1. **Compact namespace**: The `name` field provides a standardized reverse-domain identifier (e.g., `dev.ucp.shopping.checkout`) that's more compact and semantic than the full `$id` URL.
+
+### Why Both `$id` and `name`?
+
+| Field  | Role                                                    | Format                 |
+| ------ | ------------------------------------------------------- | ---------------------- |
+| `$id`  | JSON Schema primitive for `$ref` resolution and tooling | URI (required by spec) |
+| `name` | Registry key and stable identifier                      | Reverse-domain         |
+
+`$id` must be a valid URI per JSON Schema spec. `name` is the **key used in registries** (`capabilities`, `services`, `payment_handlers`) and the wire protocol identifier used in capability negotiation—decoupled from schema hosting so that `schema` URLs can change as infrastructure evolves.
+
+The reverse-domain format provides **namespace governance**: domain owners control their namespace (`dev.ucp.*`, `com.shopify.*`), avoiding collisions between UCP and vendor entities. This stable identity layer allows trust and resolution mechanisms to evolve independently—future versions could adopt verifiable credentials, content-addressed schemas, or other verification methods without breaking capability negotiation.
+
+### Why `version` Uses Dates?
+
+The `version` field uses date-based versioning (`YYYY-MM-DD`) to enable:
+
+- **Capability negotiation**: Platforms request specific versions they support
+- **Breaking change management**: New versions get new dates; old versions remain valid and resolvable
+- **Independent lifecycles**: Extensions can release on their own schedule
+
+## Schema Categories
+
+UCP schemas fall into six categories based on their role in the protocol.
+
+### Capability Schemas
+
+Define negotiated capabilities that appear in `ucp.capabilities{}` registries.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`, `name`, `version`
+- **Variants**: `platform_schema`, `business_schema`, `response_schema`
+
+Examples: `checkout.json`, `fulfillment.json`, `discount.json`, `order.json`
+
+### Service Schemas
+
+Define transport bindings that appear in `ucp.services{}` registries. Each transport (REST, MCP, A2A, Embedded) is a separate entry.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`, `name`, `version`
+- **Variants**: `platform_schema`, `business_schema`
+- **Transport requirements** (additional beyond the common base):
+  - Platform profile (`platform_schema`): REST/MCP/Embedded require `schema` (OpenAPI/OpenRPC URL). A2A has no additional requirements.
+  - Business profile (`business_schema`): REST/MCP/A2A require `endpoint` (Agent Card URL for A2A). Embedded has no additional requirements.
+
+### Payment Handler Schemas
+
+Define payment handler configurations in `ucp.payment_handlers{}` registries.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`, `name`, `version`, `available_instruments`
+- **Variants**: `platform_schema`, `business_schema`, `response_schema`
+- **Instance `id`**: Required to distinguish multiple configurations of the same handler
+- **`available_instruments`**: Optional. Array of supported instrument types with type-specific constraints (e.g., brands for credit cards). When absent, the handler places no restrictions — it supports the full set of instrument types defined by its handler schema.
+
+Examples: `com.google.pay`, `dev.shopify.shop_pay`, `dev.ucp.processor_tokenizer`
+
+**→ See [Payment Handler Guide](/ucp-announcement/latest/specification/payment-handler-guide/)** for detailed guidance on handler structure, config/instrument/credential schemas, and the full specification template.
+
+### Component Schemas
+
+Data structures embedded within capabilities but not independently negotiated. Do **not** appear in registries.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`
+- **Omit**: `name`, `version` (not independently versioned)
+
+Examples:
+
+- `schemas/shopping/payment.json` — Payment configuration (part of checkout)
+
+### Type Schemas
+
+Reusable definitions referenced by other schemas. Do **not** appear in registries.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`
+- **Omit**: `name`, `version`
+
+Examples: `types/buyer.json`, `types/line_item.json`, `types/postal_address.json`
+
+### Meta Schemas
+
+Define protocol structure rather than entity payloads.
+
+- **Top-level fields**: `$schema`, `$id`, `title`, `description`
+- **Omit**: `name`, `version`
+
+Examples: `ucp.json` (entity base), `capability.json`, `service.json`, `payment_handler.json`
+
+## The Registry Pattern
+
+UCP organizes capabilities, services, and handlers in **registries**—objects keyed by `name` rather than arrays of objects with `name` fields.
+
+```json
+{
+  "capabilities": {
+    "dev.ucp.shopping.checkout": [{"version": "draft"}],
+    "dev.ucp.shopping.fulfillment": [{"version": "draft"}]
+  },
+  "services": {
+    "dev.ucp.shopping": [
+      {"version": "draft", "transport": "rest"},
+      {"version": "draft", "transport": "mcp"}
+    ]
+  },
+  "payment_handlers": {
+    "com.google.pay": [{"id": "gpay_1234", "version": "draft", "available_instruments": [{"type": "google_pay_card"}]}]
+  }
+}
+```
+
+### Registry Contexts
+
+The same registry structure appears in three contexts with different field requirements:
+
+| Context          | Location                | Required Fields                 |
+| ---------------- | ----------------------- | ------------------------------- |
+| Platform Profile | Advertised URI          | `version`, `spec`, `schema`     |
+| Business Profile | `/.well-known/ucp`      | `version`; may add `config`     |
+| API Responses    | Checkout/order payloads | `version` (+ `id` for handlers) |
+
+## The Entity Pattern
+
+All capabilities, services, and handlers extend a common `entity` base schema:
+
+| Field     | Type   | Description                                     |
+| --------- | ------ | ----------------------------------------------- |
+| `version` | string | Entity version (`YYYY-MM-DD`) — always required |
+| `spec`    | URI    | Human-readable specification                    |
+| `schema`  | URI    | JSON Schema URL                                 |
+| `id`      | string | Instance identifier (handlers only)             |
+| `config`  | object | Entity-specific configuration                   |
+
+### Schema Variants
+
+Each entity type defines **three variants** for different contexts:
+
+**`platform_schema`** — Full declarations for discovery
+
+```json
+{
+  "dev.ucp.shopping.fulfillment": [{
+    "version": "draft",
+    "spec": "https://ucp.dev/draft/specification/fulfillment",
+    "schema": "https://ucp.dev/draft/schemas/shopping/fulfillment.json",
+    "config": {
+      "supports_multi_group": true
+    }
+  }]
+}
+```
+
+**`business_schema`** — Business-specific overrides
+
+```json
+{
+  "dev.ucp.shopping.fulfillment": [{
+    "version": "draft",
+    "config": {
+      "allows_multi_destination": {"shipping": true}
+    }
+  }]
+}
+```
+
+**`response_schema`** — Minimal references in API responses
+
+```json
+{
+  "ucp": {
+    "capabilities": {
+      "dev.ucp.shopping.fulfillment": [{"version": "draft"}]
+    }
+  }
+}
+```
+
+Define all three in your schema's `$defs`:
+
+```json
+"$defs": {
+  "platform_schema": {
+    "allOf": [{"$ref": "../capability.json#/$defs/platform_schema"}]
+  },
+  "business_schema": {
+    "allOf": [{"$ref": "../capability.json#/$defs/business_schema"}]
+  },
+  "response_schema": {
+    "allOf": [{"$ref": "../capability.json#/$defs/response_schema"}]
+  }
+}
+```
+
+## String Vocabularies vs Enums
+
+Prefer **open string vocabularies** with documented well-known values over closed `enum` arrays. Enums are a one-way door: adding a new value is a breaking change for strict validators, and removing one breaks existing producers.
+
+```json
+// PREFER: open vocabulary — extensible without schema changes
+"type": {
+  "type": "string",
+  "description": "Media type. Well-known values: `image`, `video`, `model_3d`."
+}
+
+// AVOID: closed enum — adding `audio` requires a schema version bump
+"type": {
+  "type": "string",
+  "enum": ["image", "video", "model_3d"]
+}
+```
+
+**Use `enum` only for provably closed sets** where new values would represent a fundamental protocol change (e.g., `checkout.status: open | completed | expired`). If the set might grow as new use cases emerge, use an open string with well-known values documented in the `description`.
+
+## Versioning Strategy
+
+### UCP Capabilities (`dev.ucp.*`)
+
+UCP-authored capabilities version with protocol releases by default. Individual capabilities **may** version independently when needed.
+
+### Vendor Capabilities (`com.{vendor}.*`)
+
+Capabilities outside `dev.ucp.*` version fully independently:
+
+```json
+{
+  "name": "com.shopify.loyalty",
+  "version": "2025-09-01",
+  "spec": "https://shopify.dev/ucp/loyalty",
+  "schema": "https://shopify.dev/ucp/schemas/loyalty.json"
+}
+```
+
+Vendor schemas follow the same self-describing requirements.
+
+## Extensibility and Forward Compatibility
+
+When designing schemas, you must account for how older clients will validate newer payloads. In serialization formats like Protobuf, adding a new field or enum value is generally a safe, forward-compatible change.
+
+Because modern code generators (e.g. [Quicktype](https://quicktype.io/)) translate JSON Schemas into strictly typed classes (e.g., Go structs or Java Enums), certain schema constraints will cause deserialization errors on older clients as the protocol evolves. Avoiding such changes helps minimize the need to up-version the protocol.
+
+### Open Enumerations
+
+If a field's list of values might expand in the future (e.g., adding a `"refunded"` status or a new payment method), **do not use `enum`**.
+
+Instead, define a standard `string`, document the requirement to ignore unknown values in the `description`, and use `examples` to convey current expected values to code generators. Avoid complex "Open Set" validation patterns (e.g., combining `anyOf` with `const`), as they frequently confuse client-side code generators and make schemas difficult to read.
+
+```json
+"cancellation_reason": {
+  "type": "string",
+  "description": "Reason for order cancellation. Clients MUST tolerate and ignore unknown values.",
+  "examples": ["customer_requested", "inventory_shortage", "fraud_suspected"]
+}
+```
+
+### Closed Enumerations
+
+Use strict `enum` or `const` only for permanently fixed domains or when unknown values are inherently unsupported. Reserve them for cases where adding a new value inherently requires integrators to update their code (e.g., protocol versions, strict type discriminators, or days of the week).
+
+```json
+"status": {
+  "type": "string",
+  "enum": ["open", "completed", "expired"],
+  "description": "Lifecycle state. This domain is strictly bounded; unknown states represent a breakdown in the state machine and MUST be rejected."
+}
+```
+
+### Open Objects (`additionalProperties`)
+
+Marking an object as closed preemptively prevents any future non-breaking additions to the schema. In a distributed protocol, what would otherwise be a backward-compatible field addition (e.g., adding a "gift_message" field to an order) becomes a breaking change for any client validating against a closed schema.
+
+By default, JSON Schema is open and ignores unknown properties. Authors should leave this keyword omitted except in rare circumstances: polymorphic discriminators (where strictness prevents oneOf validation ambiguity), security-critical payloads (where unknown fields may indicate tampering), or protocol envelopes (where strictness is useful to catch typos in core metadata like the `ucp` block).
+
+**Anti-Pattern (Prevents adding new fields without a reversion):**
+
+```json
+"totals": {
+  "type": "object",
+  "properties": {
+    "subtotal": {"type": "integer"}
+  },
+  "additionalProperties": false
+}
+```
+
+### Property-Count Constraints (`minProperties` / `maxProperties`)
+
+By default, UCP schemas do not set `minProperties` or `maxProperties` on object fields:
+
+- **`maxProperties`** — Limits are deferred to implementers. The protocol does not define caps because any specific limit requires judgment calls that inevitably run into exceptions. Implementers are encouraged to impose their own constraints and surface clear error feedback to support debugging and good behavior.
+- **`minProperties`** — Empty objects (`{}`) are well-formed and harmless. Implementers should accept and process them as a no-op.
+
+## Complete Example: Capability Schema
+
+A capability schema defines both payload structure and declaration variants:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ucp.dev/draft/schemas/shopping/checkout.json",
+  "name": "dev.ucp.shopping.checkout",
+  "version": "draft",
+  "title": "Checkout",
+  "description": "Base checkout schema. Extensions compose via allOf.",
+
+  "$defs": {
+    "platform_schema": {
+      "allOf": [{"$ref": "../capability.json#/$defs/platform_schema"}]
+    },
+    "business_schema": {
+      "allOf": [{"$ref": "../capability.json#/$defs/business_schema"}]
+    },
+    "response_schema": {
+      "allOf": [{"$ref": "../capability.json#/$defs/response_schema"}]
+    }
+  },
+
+  "type": "object",
+  "required": ["ucp", "id", "line_items", "status", "currency", "totals", "links"],
+  "properties": {
+    "ucp": {"$ref": "../ucp.json#/$defs/response_checkout_schema"},
+    "id": {"type": "string", "description": "Checkout identifier"},
+    "line_items": {"type": "array", "items": {"$ref": "types/line_item.json"}},
+    "status": {"type": "string", "enum": ["open", "completed", "expired"]},
+    "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+    "totals": {"$ref": "types/totals.json"},
+    "links": {"$ref": "types/links.json"}
+  }
+}
+```
+
+Key points:
+
+- **Top-level `name` and `version`** make the schema self-describing
+- **`$defs` variants** enable validation in different contexts
+- **Payload properties** define the actual checkout response structure
+
+## Documenting JSON Examples
+
+UCP's specification documents are validated mechanically. Every ```` ```json ```` block is either checked against the schemas the spec defines or explicitly marked as out-of-scope. Schema drift breaks CI instead of silently misleading readers.
+
+To make this work, UCP examples use a **bespoke JSON capability set**: strict JSON plus a small, fixed set of authoring conveniences. The validator reduces these conveniences to canonical JSON before validating against schema. Authors write enriched JSON; the wire format remains strict JSON.
+
+### The annotation contract
+
+Every ```` ```json ```` block in the spec **MUST** be preceded by an annotation comment. Unannotated blocks fail CI.
+
+```json
+<!-- ucp:example schema=shopping/checkout op=read -->
+{ ... }
+```
+
+#### Annotation grammar
+
+```text
+<!-- ucp:example schema=PATH [op=OP] [direction=DIR] [extract=JSONPATH] [target=JSONPATH] [def=NAME] -->
+<!-- ucp:example skip reason="..." -->
+```
+
+| Attribute     | Required          | Default    | Purpose                                                                   |
+| ------------- | ----------------- | ---------- | ------------------------------------------------------------------------- |
+| `schema`      | yes (unless skip) | —          | Schema to validate against, e.g. `shopping/checkout`                      |
+| `op`          | no                | `read`     | Operation: `create`, `read`, `update`, `complete`, `cancel`, etc.         |
+| `direction`   | no                | `response` | `request` or `response`                                                   |
+| `extract`     | no                | `$`        | JSONPath inside the displayed block; selected subtree becomes the example |
+| `target`      | no                | `$`        | JSONPath into the schema/scaffold; example replaces a sub-tree            |
+| `def`         | no                | —          | Pull `$defs/<name>` out of the schema and validate against that           |
+| `skip reason` | yes (with skip)   | —          | Free-form prose explaining why this block can't be validated              |
+
+#### Placement rules
+
+- The annotation **MUST** appear on its own line preceding the ```` ```json ```` fence. Blank lines between are allowed.
+
+- One annotation per block. **Multiple stacked annotations are rejected.**
+
+- **Unknown attribute names are rejected.** A typo like `shema=` fails CI rather than silently dropping the attribute.
+
+### Authoring conveniences
+
+The validator accepts these features beyond strict JSON. Use them where they aid clarity; default to strict JSON otherwise.
+
+#### Line comments
+
+`//` to end-of-line. Stripped before validation.
+
+```json
+{
+  "currency": "USD",       // ISO 4217
+  "amount": 5000           // minor units (cents)
+}
+```
+
+Block comments (`/* */`) are **not** supported. Use multiple `//` lines if you need a multi-line note.
+
+**Limitation:** the `//` stripper tracks string boundaries per-line and is approximate. An example containing a string literal with an escaped backslash followed by `//` will be misparsed. No corpus example currently triggers this; if you hit it, restructure the example.
+
+#### Template variable
+
+Exactly one variable is substituted: `draft` becomes a valid date stamp. No other template variables are recognized — any other `{{ name }}` will survive into JSON parse and fail.
+
+#### HTTP envelope
+
+If the first non-blank line matches an HTTP request line (`GET|POST|PUT|PATCH|DELETE`) or status line (`HTTP/`), the validator extracts the JSON body after the first blank line. Headers between are ignored.
+
+```json
+POST /checkout-sessions HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+
+{ "line_items": [ ... ] }
+```
+
+Other HTTP methods (`OPTIONS`, `HEAD`, `CONNECT`, `TRACE`) are not recognized as envelopes — they would be parsed as JSON and fail.
+
+#### Extracting from envelopes
+
+Use `extract=` when the displayed JSON block is a transport or wrapper object but the UCP payload to validate is nested inside it. `extract=` reads from the displayed example; `target=` writes the extracted value into the validation scaffold.
+
+```text
+<!-- ucp:example schema=shopping/checkout op=create direction=request extract=$.params.arguments.checkout -->
+```
+
+```text
+<!-- ucp:example schema=shopping/checkout extract=$.result.structuredContent.totals target=$.totals -->
+```
+
+The first example validates the nested checkout request. The second extracts a `totals` fragment from a displayed envelope, inserts it into `$.totals` of the checkout scaffold, and validates the merged checkout.
+
+#### Elision markers
+
+The validator understands shapes that mean **"this required field is present; its value is not asserted."** Coverage check still verifies the field is acknowledged. Schema validation errors at the elided sub-tree are suppressed.
+
+| Shape              | Meaning                             |
+| ------------------ | ----------------------------------- |
+| `"..."`            | A field's value is elided           |
+| `[ ... ]`          | A non-empty array; contents elided  |
+| `{ ... }`          | A non-empty object; contents elided |
+| `[ "..." ]`        | Equivalent to `[ ... ]`             |
+| `{ "...": "..." }` | Equivalent to `{ ... }`             |
+
+```json
+{
+  "ucp": { ... },
+  "id": "chk_abc",
+  "currency": "USD",
+  "line_items": [ ... ],
+  "totals": [ ... ]
+}
+```
+
+The bare-form `[ ... ]` and `{ ... }` are the canonical way to elide container contents. They communicate the right semantics: *a non-empty container whose members exist but are not shown.* The string-sentinel forms (`["..."]`, `{"...": "..."}`) are accepted for parser convenience but say something subtly wrong literally — they describe *an array containing one string* or *an object with one key.* Prefer the bare form in new examples.
+
+**Limitations:**
+
+- Bare `...` is recognized only as the **sole content** of an array or object. Interior bare-dot forms like `[a, ..., b]` are not supported.
+- For partial elision (some items shown, some elided), use the string form `"..."` at the position to elide: `[1, "...", 3]`.
+- The literal three-character string `"..."` cannot appear in an example as actual data — it is reserved as the elision sentinel. Use a Unicode escape (`"\u002e\u002e\u002e"`) if you genuinely need it.
+
+### What is not supported
+
+- **Trailing commas** before `}` or `]`. Strict JSON only; the wire format is strict, the spec stays honest.
+- **Block comments** `/* */`.
+- **JSON5 features**: single-quoted strings, unquoted keys, hex literals, `NaN` / `Infinity`, multi-line strings.
+- **Multiple template variables** beyond `draft`.
+- **Interior bare ellipsis** `[a, ..., b]`.
+
+### Skip reasons
+
+When a block can't be validated, use `skip` with a precise reason. Skip reasons are CI-grepable; they track what's not yet covered.
+
+Established categories — extend as needed, but be specific:
+
+- `"JSON-RPC transport binding"` — wrapped in JSON-RPC envelope
+- `"embedded protocol binding"` — Embedded Protocol transport wrapper
+- `"A2A transport binding"` — A2A transport wrapper
+- `"profile document, no wrapper schema"` — top-level `ucp` block, no enclosing entity
+- `"schema authoring example"` — JSON Schema fragments, not UCP payloads
+- `"handler config example"` / `"handler schema definition"` — payment handler internals
+- `"capability declaration fragment"` — capability registry snippet
+- `"OAuth metadata, not UCP payload"` — third-party protocol payloads
+- `"cryptographic material, not UCP payload"` — keys, signatures
+- `"<feature> fragment"` — incomplete object showing one nested field
+
+Avoid vague reasons like `"conceptual example"`. The taxonomy is how we prioritize what to validate next.
+
+### Common patterns
+
+**Full request or response.** The default case. The example is a complete payload for the named operation.
+
+```text
+<!-- ucp:example schema=shopping/cart op=create direction=request -->
+```
+
+**Sub-tree with surrounding context.** Use `target=` when the example focuses on one field. The example is spliced into a known-valid scaffold at that target path; the rest uses the scaffold's defaults.
+
+```text
+<!-- ucp:example schema=shopping/checkout target=$.totals -->
+```
+
+**Displayed envelope with nested payload.** Use `extract=` when the code block shows an envelope but only a subtree is the UCP payload under validation.
+
+```text
+<!-- ucp:example schema=shopping/checkout op=create direction=request extract=$.params.arguments.checkout -->
+```
+
+**Schema with `$defs`.** Some schemas hold several message shapes under `$defs`. When a capability's request and response are different objects (e.g. catalog: a search request is a query, a search response is a list of products), just name the operation and direction — the validator selects `$defs/{op}_{direction}` automatically:
+
+```text
+<!-- ucp:example schema=shopping/catalog_search op=search direction=response extract=$.result.structuredContent -->
+```
+
+For a shape that isn't an operation+direction — a transport's `error_response`, a profile's `business_schema`, or a named sub-type — select it explicitly with `def=`:
+
+```text
+<!-- ucp:example schema=transports/jsonrpc def=error_response op=read -->
+```
+
+**Empty body.** A `{}` payload (e.g. cancel, GET) validates trivially against the matching op + direction. No special syntax needed.
+
+### Keep validator wiring invisible
+
+The validation contract is repo infrastructure: annotations, scaffolds, and schema file paths. Readers of the rendered specification see only protocol prose and JSON examples — never the wiring.
+
+This works because:
+
+- Annotations live in HTML comments (`<!-- ucp:example ... -->`) that don't render.
+- Scaffolds live under `scripts/scaffolds/`.
+- Validator schemas live under `source/schemas/` (and `source/schemas/transports/` for envelope schemas).
+
+When you add a JSON example, pointing the validator at the right schema is **annotation work, not prose work.** The annotation already names the schema and the validator already enforces its scope. Sentences like *"this binding is schema-defined by `transports/X.json`, which validates A but not B"* duplicate what the annotation says and leak validator internals into reader-facing pages.
+
+If a binding has genuine scope confusion worth preempting — e.g. *"UCP's A2A binding does not redefine the A2A protocol"* — say it in **protocol terms**, not as a schema-coverage note. The protocol concern is real; the file path isn't part of it.
+
+### What authors don't do
+
+- **Don't invent skip reasons that hide bugs.** If validation fails because the example is wrong, fix the example.
+- **Don't put validation directives in comments.** Comments are documentation for human readers; they are not interpreted by the validator.
+- **Don't use unsupported syntax.** The "what is not supported" list above is exhaustive — additions require updating the contract and the validator together, not stretching the parser.
+- **Don't nest ```` ```json ```` blocks** or place annotations in indented contexts where the markdown parser might miss them.
+
+### Running the validator locally
+
+The validator is pure stdlib Python and shells out to the [`ucp-schema`](https://github.com/universal-commerce-protocol/ucp-schema) binary for schema resolution and payload validation. First-time setup:
+
+```bash
+uv sync                                   # Python deps
+cargo install ucp-schema                  # validator backend
+uv tool install pre-commit                # if not already installed
+pre-commit install --hook-type pre-commit --hook-type pre-push
+```
+
+The `--hook-type pre-push` flag is important: pre-commit only installs the `pre-commit` stage hook by default, but this repo also uses `pre-push` hooks as a safety net. Pass both to opt into the full enforcement story.
+
+Manual invocation:
+
+```bash
+python3 scripts/validate_examples.py --schema-base source/schemas/
+python3 scripts/validate_examples.py --schema-base source/schemas/ --file docs/specification/checkout-rest.md docs/specification/cart.md
+python3 scripts/validate_examples.py --schema-base source/schemas/ --audit
+```
+
+The `--audit` mode lists blocks without validating them — useful for counting skips and identifying unannotated blocks. `--file` accepts one or more paths for incremental validation.
+
+#### What runs automatically
+
+The "schema drift breaks CI" claim above is enforced by three surfaces:
+
+| Surface                           | Scope                          | When                                                                      |
+| --------------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| `pre-commit` stage hook           | Changed `docs/*.md` files only | Every `git commit` (if installed)                                         |
+| `pre-commit` stage hook           | Full corpus                    | Every `git commit` that touches `source/schemas/` or the validator itself |
+| `pre-push` stage hook             | Same as pre-commit             | Every `git push` — catches `--no-verify` bypasses                         |
+| CI (`.github/workflows/docs.yml`) | Full corpus                    | Every PR — the mandatory backstop                                         |
+
+The pre-commit hooks are opt-in (require the install commands above); CI is unconditional. Skipping local hooks doesn't break anything — PRs with unannotated blocks or broken validation will fail CI — but local hooks give earlier feedback than waiting for the GitHub Actions run.
+
+#### When the full-corpus check fires (and why)
+
+The pre-commit/pre-push split between "changed files only" and "full corpus" is intentional:
+
+- **Doc edits** (`docs/*.md`) validate only the changed files. Catches direct errors — unannotated blocks, wrong schema name, broken example payload — in the file you're editing, fast.
+- **Schema or validator-code edits** trigger a full-corpus check. A single change to `source/schemas/shopping/cart.json` (or to `validate_examples.py` itself) can invalidate examples across many unrelated docs. The full check is the only way to catch that cross-file regression locally before it hits CI.
+
+# Versioning
+
+UCP uses date-based version identifiers following the format `YYYY-MM-DD` to indicate the last date backwards incompatible changes were made.
+
+New development occurs on the `main` branch. We will maintain long-lived branches for all supported releases of the spec.
+
+- When the Tech Council approves a new version of UCP, we will cut a new branch named `release/YYYY-MM-DD` directly from the current state of `main`.
+  - We will implement a code freeze on the release branch the moment a `release/YYYY-MM-DD` branch is cut. Only critical bug fixes should move during this window.
+  - Critical issues discovered after cutting a release branch should be fixed in one of two ways:
+  - The fix is made on the release branch and merged to `main`.
+  - The fix is made on `main` and cherry-picked to the release branch.
+- Once finalized, we will merge the release branch into `main` and tag it (e.g., `git tag -a vYYYY-MM-DD`). We will use a GitHub Action to detect the new tag and automatically generate a release notes draft and upload artifacts.
+- Unlike temporary feature branches, release/YYYY-MM-DD branches are long-lived and correspond to specific versions of the spec for historical reference and maintenance.
+
+## Breaking PRs
+
+- Breaking changes should include `!` in the PR title
+- Timing: We will announce the breaking change in Discussions 2 weeks before the change is merged.
